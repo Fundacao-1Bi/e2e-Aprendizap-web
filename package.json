@@ -1,0 +1,23 @@
+{
+  "name": "e2e-aprendizap-web",
+  "version": "1.0.0",
+  "description": "Testes e2e para a platafoma Web do aprendizap focadas no ambiente de homologação - https://appdev.aprendizap.com.br/",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fundacao-1Bi/e2e-Aprendizap-web.git"
+  },
+  "author": "AprendiZAP",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fundacao-1Bi/e2e-Aprendizap-web/issues"
+  },
+  "homepage": "https://github.com/Fundacao-1Bi/e2e-Aprendizap-web#readme",
+  "devDependencies": {
+    "cypress": "^12.11.0"
+  }
+}
