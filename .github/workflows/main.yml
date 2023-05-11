@@ -6,6 +6,8 @@ on:
     branches:
       - main
       - develop
+  repository_dispatch:
+    types: [deploy_completed]
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
