@@ -18,7 +18,7 @@ context("Fluxos de entrada Homepage", () => {
           cy.contains("Alunos");
 
           cy.contains("Ensino Fundamental:");
-          cy.contains("Ensino médio:"); // TODO: update to Médio
+          cy.contains("Ensino Médio:");
           cy.contains("button", "Continuar")
             .should("be.visible")
             .should("be.disabled");
