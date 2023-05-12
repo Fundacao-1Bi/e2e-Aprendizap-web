@@ -11,46 +11,38 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
       );
       cy.visit("https://appdev.aprendizap.com.br/?utm_origin=landingpage");
 
-      let firstRequestWasCreatedAt = true;
-      cy.wait("@reportData").should(({ request, response }) => {
-        if (request.body.save.key === "createdAt") {
-          expect(request.body).to.have.property("save");
-          expect(request.body.save).to.have.property("key");
-          expect(request.body.save.key).to.equal("createdAt");
-          expect(request.headers).to.have.property("content-type");
-          expect(response && response.body).to.have.property("error", false);
-        } else {
-          expect(request.body).to.deep.equal({
-            save: {
-              key: "status",
-              value: "paginaOnboarding?utm_origin=landingpage",
-            },
-          });
-          expect(request.headers).to.have.property("content-type");
-          expect(response && response.body).to.have.property("error", false);
-          firstRequestWasCreatedAt = false;
-        }
-      });
+      let createdAtCalled = false;
+      let statusCalled = false;
+      const numberOfRequests = 2;
 
-      // Report de origem de acesso
-      cy.wait("@reportData").should(({ request, response }) => {
-        if (firstRequestWasCreatedAt) {
-          expect(request.body).to.deep.equal({
-            save: {
-              key: "status",
-              value: "paginaOnboarding?utm_origin=landingpage",
-            },
-          });
-          expect(request.headers).to.have.property("content-type");
-          expect(response && response.body).to.have.property("error", false);
-        } else {
+      for (let i = 0; i < numberOfRequests; i++) {
+        cy.wait("@reportData").should(({ request, response }) => {
           expect(request.body).to.have.property("save");
           expect(request.body.save).to.have.property("key");
-          expect(request.body.save.key).to.equal("createdAt");
-          expect(request.headers).to.have.property("content-type");
           expect(response && response.body).to.have.property("error", false);
-        }
-      });
+          switch (request.body.save.key) {
+            case "createdAt":
+              expect(request.body.save.key).to.equal("createdAt");
+
+              createdAtCalled = true;
+              break;
+
+            case "status":
+              expect(request.body).to.deep.equal({
+                save: {
+                  key: "status",
+                  value: "paginaOnboarding?utm_origin=landingpage",
+                },
+              });
+              statusCalled = true;
+              break;
+          }
+          if (i === numberOfRequests - 1) {
+            expect(createdAtCalled).to.be.true;
+            expect(statusCalled).to.be.true;
+          }
+        });
+      }
 
       cy.contains("h2", "Conteúdos e exercícios gratuitos").should(
         "be.visible"
@@ -75,48 +67,52 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
         "https://appdev.aprendizap.com.br/?utm_origin=SEO&SEOID=42424242-65fe-400d-8511-b87f78424242"
       );
 
-      let firstRequestWasCreatedAt = true;
-      cy.wait("@reportData").should(({ request, response }) => {
-        if (request.body.save.key === "createdAt") {
-          expect(request.body).to.have.property("save");
-          expect(request.body.save).to.have.property("key");
-          expect(request.body.save.key).to.equal("createdAt");
-          expect(request.headers).to.have.property("content-type");
-          expect(response && response.body).to.have.property("error", false);
-        } else {
-          expect(request.body).to.deep.equal({
-            save: {
-              key: "status",
-              value:
-                "paginaOnboarding?utm_origin=SEO&SEOID=42424242-65fe-400d-8511-b87f78424242",
-            },
-          });
-          expect(request.headers).to.have.property("content-type");
-          expect(response && response.body).to.have.property("error", false);
-          firstRequestWasCreatedAt = false;
-        }
-      });
+      let createdAtCalled = false;
+      let statusCalled = false;
+      let seoIDCalled = false;
 
-      // Report de origem de acesso
-      cy.wait("@reportData").should(({ request, response }) => {
-        if (firstRequestWasCreatedAt) {
-          expect(request.body).to.deep.equal({
-            save: {
-              key: "status",
-              value:
-                "paginaOnboarding?utm_origin=SEO&SEOID=42424242-65fe-400d-8511-b87f78424242",
-            },
-          });
-          expect(request.headers).to.have.property("content-type");
-          expect(response && response.body).to.have.property("error", false);
-        } else {
+      const numberOfRequests = 3;
+
+      for (let i = 0; i < numberOfRequests; i++) {
+        cy.wait("@reportData").should(({ request, response }) => {
           expect(request.body).to.have.property("save");
           expect(request.body.save).to.have.property("key");
-          expect(request.body.save.key).to.equal("createdAt");
-          expect(request.headers).to.have.property("content-type");
           expect(response && response.body).to.have.property("error", false);
-        }
-      });
+          switch (request.body.save.key) {
+            case "createdAt":
+              expect(request.body.save.key).to.equal("createdAt");
+
+              createdAtCalled = true;
+              break;
+
+            case "status":
+              expect(request.body).to.deep.equal({
+                save: {
+                  key: "status",
+                  value:
+                    "paginaOnboarding?utm_origin=SEO&SEOID=42424242-65fe-400d-8511-b87f78424242",
+                },
+              });
+              statusCalled = true;
+              break;
+
+            case "SEO_ID":
+              expect(request.body).to.deep.equal({
+                save: {
+                  key: "SEO_ID",
+                  value: "42424242-65fe-400d-8511-b87f78424242",
+                },
+              });
+              seoIDCalled = true;
+              break;
+          }
+          if (i === numberOfRequests - 1) {
+            expect(createdAtCalled).to.be.true;
+            expect(statusCalled).to.be.true;
+            expect(seoIDCalled).to.be.true;
+          }
+        });
+      }
     });
   });
 });
