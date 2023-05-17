@@ -85,7 +85,7 @@ context("Fluxos de entrada Homepage", () => {
       });
     });
 
-    describe("Quando digito uma quantidade de alunos", () => {
+    describe("Quando digito uma quantidade de alunos maior que zero", () => {
       beforeEach(() => {
         cy.contains("button", "Continuar").should("be.disabled");
         cy.get("#studentsQuantity").type("30");
@@ -103,10 +103,10 @@ context("Fluxos de entrada Homepage", () => {
       });
     });
 
-    describe("Quando marco a opção Quero usar AprendiZAP para fins pessoais", () => {
+    describe("Quando digito uma quantidade de alunos igual a zero", () => {
       beforeEach(() => {
         cy.contains("button", "Continuar").should("be.disabled");
-        cy.contains("Quero usar AprendiZAP para fins pessoais").click();
+        cy.get("#studentsQuantity").type("0");
       });
       it("Então devo ver o botão de continuar habilitado", () => {
         cy.contains("button", "Continuar").should("not.be.disabled");
