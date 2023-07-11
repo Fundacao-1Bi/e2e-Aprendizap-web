@@ -5,7 +5,7 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
     cy.clearLocalStorage();
   });
   describe("Quando acesso a homepage do aplicativo vindo de landing page", () => {
-    it("Então devo visualizar a segunda tela do onboarding, com as opções de matérias que posso selecionar e reportar paginaOnboarding?utm_origin=landingpage", () => {
+    it("Então devo visualizar a primeira tela de onboarding contendo alguns benefícios do AprendiZAP em carrossel (O carrossel não passa sozinho) e a opção de Criar conta, Acesso rápido e Entrar e reportar paginaOnboarding?utm_origin=landingpage", () => {
       cy.intercept("PUT", "**/develop/teachers/unregistered/**").as(
         "reportData"
       );
@@ -44,19 +44,22 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
         });
       }
 
+      cy.contains("h2", "Conteúdos e exercícios gratuitos").should(
+        "be.visible"
+      );
+      cy.contains("h2", "para aulas incríveis!").should("be.visible");
       cy.contains(
         "p",
-        "Selecione disciplinas e áreas para acessar seus conteúdos."
+        "Acesse + de 2000 conteúdos prontos para inspiração e construção de melhores experiências de aprendizagem."
       ).should("be.visible");
-      cy.contains("legend", "Ensino Fundamental:").should("be.visible");
-      cy.contains("legend", "Ensino Médio:").should("be.visible");
-      cy.contains("button", "Continuar").should("be.visible");
-      cy.contains("button", "Voltar").should("be.visible");
+      cy.contains("button", "Criar conta").should("be.visible");
+      cy.contains("button", "Acesso rápido").should("be.visible");
+      cy.contains("button", "Entrar").should("be.visible");
     });
   });
 
   describe("Quando acesso a homepage do aplicativo vindo de SEO", () => {
-    it("Então devo visualizar a segunda tela do onboarding, com as opções de matérias que posso selecionar e reportar paginaOnboarding?utm_origin=SEO e o SEO_ID", () => {
+    it("Então devo visualizar a primeira tela de onboarding contendo alguns benefícios do AprendiZAP em carrossel (O carrossel não passa sozinho) e a opção de Criar conta, Acesso rápido e Entrar e reportar paginaOnboarding?utm_origin=SEO", () => {
       cy.intercept("PUT", "**/develop/teachers/unregistered/**").as(
         "reportData"
       );
@@ -109,14 +112,6 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
             expect(seoIDCalled).to.be.true;
           }
         });
-        cy.contains(
-          "p",
-          "Selecione disciplinas e áreas para acessar seus conteúdos."
-        ).should("be.visible");
-        cy.contains("legend", "Ensino Fundamental:").should("be.visible");
-        cy.contains("legend", "Ensino Médio:").should("be.visible");
-        cy.contains("button", "Continuar").should("be.visible");
-        cy.contains("button", "Voltar").should("be.visible");
       }
     });
   });
