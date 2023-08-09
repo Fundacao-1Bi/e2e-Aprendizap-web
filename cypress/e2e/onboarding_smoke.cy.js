@@ -3,15 +3,13 @@
 context("Dado que não preenchi nenhum step de onboarding", () => {
   beforeEach(async () => {
     cy.clearLocalStorage();
-    if (!window?.navigator || !navigator?.serviceWorker) {
-      return null;
+    if (window.navigator && navigator.serviceWorker) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          registration.unregister();
+        });
+      });
     }
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    return Promise.all(
-      registrations.map((registration) => {
-        return registration.unregister();
-      })
-    );
   });
   describe("Quando acesso a homepage do aplicativo vindo de landing page", () => {
     it("Então devo visualizar a primeira tela de onboarding contendo alguns benefícios do AprendiZAP em carrossel (O carrossel não passa sozinho) e a opção de Criar conta, Acesso rápido e Entrar e reportar paginaOnboarding?utm_origin=landingpage", () => {
@@ -21,6 +19,7 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
       cy.visit("https://appdev.aprendizap.com.br/?utm_origin=landingpage", {
         onBeforeLoad(win) {
           delete win.navigator.__proto__.ServiceWorker;
+          delete win.navigator.serviceWorker;
         },
       });
 
@@ -82,6 +81,7 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
         {
           onBeforeLoad(win) {
             delete win.navigator.__proto__.ServiceWorker;
+            delete win.navigator.serviceWorker;
           },
         }
       );

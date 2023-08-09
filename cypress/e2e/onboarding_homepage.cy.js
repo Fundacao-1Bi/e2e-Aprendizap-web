@@ -4,17 +4,16 @@ context("Fluxos de entrada Homepage", () => {
     cy.visit("https://appdev.aprendizap.com.br", {
       onBeforeLoad(win) {
         delete win.navigator.__proto__.ServiceWorker;
+        delete win.navigator.serviceWorker;
       },
     });
-    if (!window?.navigator || !navigator?.serviceWorker) {
-      return null;
+    if (window.navigator && navigator.serviceWorker) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          registration.unregister();
+        });
+      });
     }
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    return Promise.all(
-      registrations.map((registration) => {
-        return registration.unregister();
-      })
-    );
   });
 
   context(
