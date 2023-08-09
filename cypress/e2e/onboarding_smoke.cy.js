@@ -3,15 +3,6 @@
 context("Dado que não preenchi nenhum step de onboarding", () => {
   beforeEach(async () => {
     cy.clearLocalStorage();
-    if (!window.navigator || !navigator.serviceWorker) {
-      return null;
-    }
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    return Promise.all(
-      registrations.map((registration) => {
-        return registration.unregister();
-      })
-    );
   });
   describe("Quando acesso a homepage do aplicativo vindo de landing page", () => {
     it("Então devo visualizar a primeira tela de onboarding contendo alguns benefícios do AprendiZAP em carrossel (O carrossel não passa sozinho) e a opção de Criar conta, Acesso rápido e Entrar e reportar paginaOnboarding?utm_origin=landingpage", () => {
