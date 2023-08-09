@@ -12,7 +12,6 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
     }
   });
   afterEach(() => {
-    cy.clearLocalStorage();
     if (window.navigator && navigator.serviceWorker) {
       navigator.serviceWorker.getRegistrations().then((registrations) => {
         registrations.forEach((registration) => {
@@ -100,13 +99,14 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
       let statusCalled = false;
       let seoIDCalled = false;
 
-      const numberOfRequests = 3;
+      const numberOfRequests = 4;
 
       for (let i = 0; i < numberOfRequests; i++) {
         cy.wait("@reportData").should(({ request, response }) => {
           expect(request.body).to.have.property("save");
           expect(request.body.save).to.have.property("key");
           expect(response && response.body).to.have.property("error", false);
+          console.log("request.body.save.key", request.body.save.key);
           switch (request.body.save.key) {
             case "createdAt":
               expect(request.body.save.key).to.equal("createdAt");
