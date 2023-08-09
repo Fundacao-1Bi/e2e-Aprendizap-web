@@ -6,6 +6,15 @@ context("Fluxos de entrada Homepage", () => {
         delete win.navigator.__proto__.ServiceWorker;
       },
     });
+    if (!window?.navigator || !navigator?.serviceWorker) {
+      return null;
+    }
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    return Promise.all(
+      registrations.map((registration) => {
+        return registration.unregister();
+      })
+    );
   });
 
   context(
