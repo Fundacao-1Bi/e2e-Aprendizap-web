@@ -1,15 +1,28 @@
 /// <reference types="cypress" />
 
 context("Dado que não preenchi nenhum step de onboarding", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     cy.clearLocalStorage();
+    if (!window.navigator || !navigator.serviceWorker) {
+      return null;
+    }
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    return Promise.all(
+      registrations.map((registration) => {
+        return registration.unregister();
+      })
+    );
   });
   describe("Quando acesso a homepage do aplicativo vindo de landing page", () => {
     it("Então devo visualizar a primeira tela de onboarding contendo alguns benefícios do AprendiZAP em carrossel (O carrossel não passa sozinho) e a opção de Criar conta, Acesso rápido e Entrar e reportar paginaOnboarding?utm_origin=landingpage", () => {
       cy.intercept("PUT", "**/develop/teachers/unregistered/**").as(
         "reportData"
       );
-      cy.visit("https://appdev.aprendizap.com.br/?utm_origin=landingpage");
+      cy.visit("https://appdev.aprendizap.com.br/?utm_origin=landingpage", {
+        onBeforeLoad(win) {
+          delete win.navigator.__proto__.ServiceWorker;
+        },
+      });
 
       let createdAtCalled = false;
       let statusCalled = false;
@@ -63,8 +76,14 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
       cy.intercept("PUT", "**/develop/teachers/unregistered/**").as(
         "reportData"
       );
+
       cy.visit(
-        "https://appdev.aprendizap.com.br/?utm_origin=SEO&SEOID=42424242-65fe-400d-8511-b87f78424242"
+        "https://appdev.aprendizap.com.br/?utm_origin=SEO&SEOID=42424242-65fe-400d-8511-b87f78424242",
+        {
+          onBeforeLoad(win) {
+            delete win.navigator.__proto__.ServiceWorker;
+          },
+        }
       );
 
       let createdAtCalled = false;

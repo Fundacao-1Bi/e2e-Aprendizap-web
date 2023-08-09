@@ -1,7 +1,20 @@
 /// <reference types="cypress" />
 context("Fluxos de entrada Homepage", () => {
-  beforeEach(() => {
-    cy.visit("https://appdev.aprendizap.com.br");
+  beforeEach(async () => {
+    cy.visit("https://appdev.aprendizap.com.br", {
+      onBeforeLoad(win) {
+        delete win.navigator.__proto__.ServiceWorker;
+      },
+    });
+    if (!window.navigator || !navigator.serviceWorker) {
+      return null;
+    }
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    return Promise.all(
+      registrations.map((registration) => {
+        return registration.unregister();
+      })
+    );
   });
 
   context(
