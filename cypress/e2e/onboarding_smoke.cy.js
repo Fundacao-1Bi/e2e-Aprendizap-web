@@ -1,7 +1,17 @@
 /// <reference types="cypress" />
 
 context("Dado que não preenchi nenhum step de onboarding", () => {
-  beforeEach(async () => {
+  beforeEach(() => {
+    cy.clearLocalStorage();
+    if (window.navigator && navigator.serviceWorker) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          registration.unregister();
+        });
+      });
+    }
+  });
+  afterEach(() => {
     cy.clearLocalStorage();
     if (window.navigator && navigator.serviceWorker) {
       navigator.serviceWorker.getRegistrations().then((registrations) => {
