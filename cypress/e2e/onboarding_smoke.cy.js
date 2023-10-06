@@ -21,7 +21,7 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
     }
   });
   describe("Quando acesso a homepage do aplicativo vindo de landing page", () => {
-    it("Então devo visualizar a primeira tela de onboarding contendo alguns benefícios do AprendiZAP em carrossel (O carrossel não passa sozinho) e a opção de Criar conta, Acesso rápido e Entrar e reportar paginaOnboarding?utm_origin=landingpage", () => {
+    it("Então devo visualizar a primeira tela de onboarding contendo alguns benefícios do AprendiZAP em carrossel (O carrossel não passa sozinho) e a opção de Entrar, Entrar com Google, Entrar com Facebook e Criar conta e reportar paginaOnboarding?utm_origin=landingpage", () => {
       cy.intercept("PUT", "**/teachers/unregistered/**").as("reportData");
       cy.visit("https://appdev.aprendizap.com.br/?utm_origin=landingpage", {
         onBeforeLoad(win) {
@@ -71,14 +71,15 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
         "p",
         "Acesse + de 2000 conteúdos prontos para inspiração e construção de melhores experiências de aprendizagem."
       ).should("be.visible");
-      cy.contains("button", "Criar conta").should("be.visible");
-      cy.contains("button", "Acesso rápido").should("be.visible");
       cy.contains("button", "Entrar").should("be.visible");
+      cy.contains("button", "Entrar com Google").should("be.visible");
+      cy.contains("button", "Entrar com Facebook").should("be.visible");
+      cy.contains("button", "Criar conta").should("be.visible");
     });
   });
 
   describe("Quando acesso a homepage do aplicativo vindo de SEO", () => {
-    it("Então devo visualizar a primeira tela de onboarding contendo alguns benefícios do AprendiZAP em carrossel (O carrossel não passa sozinho) e a opção de Criar conta, Acesso rápido e Entrar e reportar paginaOnboarding?utm_origin=SEO", () => {
+    it("Então devo visualizar a primeira tela de onboarding contendo alguns benefícios do AprendiZAP em carrossel (O carrossel não passa sozinho) e a opção de Entrar, Entrar com Google, Entrar com Facebook e Criar conta e reportar paginaOnboarding?utm_origin=SEO", () => {
       cy.intercept("PUT", "**/teachers/unregistered/**").as("reportData");
 
       cy.visit(
