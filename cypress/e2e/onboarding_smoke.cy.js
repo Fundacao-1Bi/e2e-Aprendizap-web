@@ -31,8 +31,9 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
       });
 
       let createdAtCalled = false;
-      let statusCalled = false;
-      const numberOfRequests = 2;
+      let statuspaginaOnboardingCalled = false;
+      let statusOpeningCalled = false;
+      const numberOfRequests = 3;
 
       for (let i = 0; i < numberOfRequests; i++) {
         cy.wait("@reportData").should(({ request, response }) => {
@@ -47,18 +48,32 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
               break;
 
             case "status":
-              expect(request.body).to.deep.equal({
-                save: {
-                  key: "status",
-                  value: "paginaOnboarding?utm_origin=landingpage",
-                },
-              });
-              statusCalled = true;
+              if (
+                request.body.save.value ===
+                "OPENING?autenticacao=entrar&utm_source=/"
+              ) {
+                expect(request.body).to.deep.equal({
+                  save: {
+                    key: "status",
+                    value: "OPENING?autenticacao=entrar&utm_source=/",
+                  },
+                });
+                statusOpeningCalled = true;
+              } else {
+                expect(request.body).to.deep.equal({
+                  save: {
+                    key: "status",
+                    value: "paginaOnboarding?utm_origin=landingpage",
+                  },
+                });
+                statuspaginaOnboardingCalled = true;
+              }
               break;
           }
           if (i === numberOfRequests - 1) {
             expect(createdAtCalled).to.be.true;
-            expect(statusCalled).to.be.true;
+            expect(statusOpeningCalled).to.be.true;
+            expect(statuspaginaOnboardingCalled).to.be.true;
           }
         });
       }
@@ -93,9 +108,9 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
       );
 
       let createdAtCalled = false;
-      let statusCalled = false;
+      let statusOnboardingCalled = false;
       let seoIDCalled = false;
-
+      let statusOpeningCalled = false;
       const numberOfRequests = 4;
 
       for (let i = 0; i < numberOfRequests; i++) {
@@ -103,23 +118,34 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
           expect(request.body).to.have.property("save");
           expect(request.body.save).to.have.property("key");
           expect(response && response.body).to.have.property("error", false);
-          console.log("request.body.save.key", request.body.save.key);
           switch (request.body.save.key) {
             case "createdAt":
               expect(request.body.save.key).to.equal("createdAt");
-
               createdAtCalled = true;
               break;
 
             case "status":
-              expect(request.body).to.deep.equal({
-                save: {
-                  key: "status",
-                  value:
-                    "paginaOnboarding?utm_origin=SEO&SEOID=42424242-65fe-400d-8511-b87f78424242",
-                },
-              });
-              statusCalled = true;
+              if (
+                request.body.save.value ===
+                "OPENING?autenticacao=entrar&utm_source=/"
+              ) {
+                expect(request.body).to.deep.equal({
+                  save: {
+                    key: "status",
+                    value: "OPENING?autenticacao=entrar&utm_source=/",
+                  },
+                });
+                statusOpeningCalled = true;
+              } else {
+                expect(request.body).to.deep.equal({
+                  save: {
+                    key: "status",
+                    value:
+                      "paginaOnboarding?utm_origin=SEO&SEOID=42424242-65fe-400d-8511-b87f78424242",
+                  },
+                });
+                statusOnboardingCalled = true;
+              }
               break;
 
             case "SEO_ID":
@@ -134,7 +160,8 @@ context("Dado que não preenchi nenhum step de onboarding", () => {
           }
           if (i === numberOfRequests - 1) {
             expect(createdAtCalled).to.be.true;
-            expect(statusCalled).to.be.true;
+            expect(statusOnboardingCalled).to.be.true;
+            expect(statusOpeningCalled).to.be.true;
             expect(seoIDCalled).to.be.true;
           }
         });
