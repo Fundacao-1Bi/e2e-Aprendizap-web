@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/Fundacao-1Bi/e2e-Aprendizap-web#readme",
   "devDependencies": {
-    "cypress": "^15.14.2"
+    "cypress": "15.14.2"
   }
 }
